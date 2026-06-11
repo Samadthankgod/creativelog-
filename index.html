@@ -4,13 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Creativlog — Samad Designs</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/recharts@2.10.0/umd/Recharts.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:#f7f7f5;color:#1a1a1a;font-size:14px}
@@ -18,439 +13,470 @@ input,select,textarea,button{font-family:'DM Sans',sans-serif}
 input,select,textarea{width:100%;padding:9px 12px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;color:#1a1a1a;font-size:14px;outline:none;transition:border-color .15s}
 input:focus,select:focus,textarea:focus{border-color:#1D9E75}
 textarea{resize:vertical;min-height:80px}
-button{cursor:pointer;border:none;border-radius:8px;font-size:14px;font-weight:500;transition:opacity .15s,background .15s}
-button:hover{opacity:.88}
-.btn-primary{background:#0F6E56;color:#fff;padding:10px 20px}
+button{cursor:pointer;border:none;border-radius:8px;font-size:14px;font-weight:500;transition:opacity .15s}
+button:hover{opacity:.85}
+.btn-green{background:#0F6E56;color:#fff;padding:10px 20px;border:none}
 .btn-ghost{background:transparent;color:#555;border:1px solid #e5e5e5;padding:8px 16px}
-.btn-ghost:hover{background:#f7f7f5;opacity:1}
-.spinner{width:28px;height:28px;border:2px solid #e5e5e5;border-top-color:#0F6E56;border-radius:50%;animation:spin .7s linear infinite}
+.spinner{width:32px;height:32px;border:3px solid #e5e5e5;border-top-color:#0F6E56;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
-.app-shell{display:flex;min-height:100vh}
-.sidebar{width:220px;min-height:100vh;background:#fff;border-right:1px solid #e5e5e5;display:flex;flex-direction:column;padding:20px 14px;position:fixed;top:0;left:0;bottom:0;z-index:10}
-.sidebar-brand{display:flex;align-items:center;gap:10px;padding:0 6px 24px}
+/* LAYOUT */
+#app{display:flex;min-height:100vh}
+.sidebar{width:220px;background:#fff;border-right:1px solid #e5e5e5;display:flex;flex-direction:column;padding:20px 14px;position:fixed;top:0;left:0;bottom:0;z-index:10}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px 24px}
 .brand-icon{width:32px;height:32px;background:#0F6E56;color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0}
-.brand-name{font-size:16px;font-weight:600;letter-spacing:-.3px}
-.sidebar-nav{display:flex;flex-direction:column;gap:3px;flex:1}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;background:transparent;color:#555;font-size:14px;width:100%;text-align:left;font-weight:400;border:none;transition:background .12s,color .12s}
-.nav-item:hover{background:#f7f7f5;color:#1a1a1a;opacity:1}
-.nav-item.active{background:#E1F5EE;color:#0F6E56;font-weight:500}
-.sidebar-footer{padding-top:20px;border-top:1px solid #e5e5e5}
-.sidebar-user{display:flex;align-items:center;gap:10px;padding:6px 0}
-.user-avatar{width:34px;height:34px;border-radius:50%;background:#E1F5EE;color:#0F6E56;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
-.main-content{margin-left:220px;flex:1;padding:32px 28px;max-width:1000px}
-.mobile-topbar{display:none}
-.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:24px}
-.metric-card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px 18px}
-.metric-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.metric-value{font-size:22px;font-weight:600;letter-spacing:-.5px}
-.metric-sub{font-size:11px;color:#888;margin-top:3px}
-.chart-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:18px 20px;margin-bottom:16px}
-.chart-title{font-size:13px;font-weight:500;color:#555;margin-bottom:14px}
-.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.form-card{background:#fff;border:1px solid #e5e5e5;border-radius:14px;padding:28px;max-width:580px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.form-group{display:flex;flex-direction:column;gap:6px}
-.form-group.full{grid-column:1/-1}
-.form-label{font-size:12px;color:#555;font-weight:500}
-.jobs-table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
-.jobs-table th{text-align:left;padding:10px 14px;font-size:11px;color:#888;font-weight:500;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e5e5e5;background:#f7f7f5;white-space:nowrap}
-.jobs-table td{padding:11px 14px;border-bottom:1px solid #f3f3f3;color:#1a1a1a;vertical-align:middle}
-.jobs-table tr:hover td{background:#fafafa}
-.cat-badge{display:inline-block;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500;white-space:nowrap}
-.filter-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.filter-row input{flex:1;min-width:180px}
+.brand-name{font-size:16px;font-weight:600}
+.nav{display:flex;flex-direction:column;gap:3px;flex:1}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;background:transparent;color:#555;font-size:14px;width:100%;text-align:left;border:none;transition:background .12s,color .12s}
+.nav-btn:hover{background:#f7f7f5;color:#1a1a1a;opacity:1}
+.nav-btn.active{background:#E1F5EE;color:#0F6E56;font-weight:500}
+.sidebar-foot{padding-top:16px;border-top:1px solid #e5e5e5}
+.user-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.avatar{width:32px;height:32px;border-radius:50%;background:#E1F5EE;color:#0F6E56;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.main{margin-left:220px;flex:1;padding:32px 28px;max-width:980px}
+/* CARDS */
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+.mcard{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:16px 18px}
+.mlabel{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.mval{font-size:21px;font-weight:600}
+.msub{font-size:11px;color:#888;margin-top:3px}
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.card-title{font-size:13px;font-weight:500;color:#555;margin-bottom:14px}
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+/* FORM */
+.form-wrap{background:#fff;border:1px solid #e5e5e5;border-radius:14px;padding:28px;max-width:560px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fgroup{display:flex;flex-direction:column;gap:5px}
+.fgroup.full{grid-column:1/-1}
+.flabel{font-size:12px;color:#555;font-weight:500}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:9px 12px;font-size:11px;color:#888;font-weight:500;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e5e5e5;background:#f7f7f5;white-space:nowrap}
+.tbl td{padding:10px 12px;border-bottom:1px solid #f3f3f3}
+.tbl tr:hover td{background:#fafafa}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;white-space:nowrap}
+.filter-row{display:flex;gap:8px;margin-bottom:14px}
+.filter-row input{flex:1}
 .filter-row select{width:auto}
-.toast{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:20px}
-.toast.success{background:#E1F5EE;border:1px solid #5DCAA5;color:#0F6E56}
-.toast.error{background:#fff0f0;border:1px solid #fca5a5;color:#b91c1c}
-.page-title{font-size:22px;font-weight:600;letter-spacing:-.3px;margin-bottom:4px}
-.page-sub{color:#888;font-size:14px;margin-bottom:24px}
-.empty-state{text-align:center;padding:60px 20px;color:#888}
-.empty-icon{font-size:40px;margin-bottom:12px}
+.toast{padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:16px}
+.toast.ok{background:#E1F5EE;border:1px solid #5DCAA5;color:#0F6E56}
+.toast.err{background:#fff0f0;border:1px solid #fca5a5;color:#b91c1c}
+.empty{text-align:center;padding:50px 20px;color:#888}
+.pg-title{font-size:22px;font-weight:600;letter-spacing:-.3px;margin-bottom:4px}
+.pg-sub{color:#888;font-size:14px;margin-bottom:24px}
+/* AUTH */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f7f7f5;padding:20px}
+.auth-card{background:#fff;border-radius:14px;border:1px solid #e5e5e5;padding:36px 32px;width:100%;max-width:380px}
+/* CHARTS - canvas */
+canvas{max-width:100%}
+/* MOBILE */
+.mob-bar{display:none}
 @media(max-width:700px){
   .sidebar{display:none}
-  .main-content{margin-left:0;padding:0 0 80px}
-  .mobile-topbar{display:flex;flex-direction:column;background:#fff;border-bottom:1px solid #e5e5e5;padding:14px 16px 0;position:sticky;top:0;z-index:10}
-  .mobile-nav{display:flex;gap:4px;margin-top:10px}
-  .mobile-nav-btn{flex:1;padding:8px 4px;border-radius:8px 8px 0 0;background:transparent;color:#888;font-size:13px;border:none;border-bottom:2px solid transparent}
-  .mobile-nav-btn.active{color:#0F6E56;border-bottom-color:#0F6E56;font-weight:500}
+  .main{margin-left:0;padding:16px 16px 80px}
+  .metric-grid{grid-template-columns:1fr 1fr}
   .charts-row{grid-template-columns:1fr}
   .form-grid{grid-template-columns:1fr}
-  .form-group.full{grid-column:1}
-  .main-content .page{padding:16px}
+  .fgroup.full{grid-column:1}
+  .mob-bar{display:flex;flex-direction:column;background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 16px 0;position:sticky;top:0;z-index:10;margin-bottom:16px}
+  .mob-nav{display:flex;gap:4px;margin-top:8px}
+  .mob-nav-btn{flex:1;padding:7px 4px;border-radius:6px 6px 0 0;background:transparent;color:#888;font-size:12px;border:none;border-bottom:2px solid transparent;cursor:pointer}
+  .mob-nav-btn.active{color:#0F6E56;border-bottom-color:#0F6E56;font-weight:500}
 }
-.page{padding:0}
 </style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-const { useState, useEffect, useMemo } = React;
-const { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } = Recharts;
+<div id="app"><div style="display:flex;align-items:center;justify-content:center;height:100vh"><div class="spinner"></div></div></div>
 
-// ── CONFIG ─────────────────────────────────────────────────
-const SUPABASE_URL = 'https://nbdxdrvtbcvhcxelvnbq.supabase.co';
-const SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5iZHhkcnZ0YmN2aGN4ZWx2bmJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5ODg5ODksImV4cCI6MjA5NjU2NDk4OX0.YdBbx5UMIkpuIlCCChZS1eJWqZrQbxqpGSi6IjtJNSc
-// ───────────────────────────────────────────────────────────
+<script>
+// ═══════════════════════════════════════════
+// PASTE YOUR SUPABASE DETAILS HERE
+const SUPA_URL  = 'https://nbdxdrvtbcvhcxelvnbq.supabase.co';
+const SUPA_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5iZHhkcnZ0YmN2aGN4ZWx2bmJxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5ODg5ODksImV4cCI6MjA5NjU2NDk4OX0.YdBbx5UMIkpuIlCCChZS1eJWqZrQbxqpGSi6IjtJNSc';
+// ═══════════════════════════════════════════
 
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
 
 const CATS = ['FLYER DESIGN','LOGO DESIGN','PRINTS','EDITING','FRAME PRINT'];
-const SOURCES = ['Inbound Client','Referral','Friend'];
-const CAT_COLORS = {'FLYER DESIGN':'#1D9E75','LOGO DESIGN':'#378ADD','PRINTS':'#BA7517','EDITING':'#888780','FRAME PRINT':'#D4537E'};
-const CAT_BG = {'FLYER DESIGN':'#E1F5EE','LOGO DESIGN':'#E6F1FB','PRINTS':'#FAEEDA','EDITING':'#F1EFE8','FRAME PRINT':'#FBEAF0'};
+const SRCS = ['Inbound Client','Referral','Friend'];
+const CC   = {'FLYER DESIGN':'#1D9E75','LOGO DESIGN':'#378ADD','PRINTS':'#BA7517','EDITING':'#888780','FRAME PRINT':'#D4537E'};
+const CB   = {'FLYER DESIGN':'#E1F5EE','LOGO DESIGN':'#E6F1FB','PRINTS':'#FAEEDA','EDITING':'#F1EFE8','FRAME PRINT':'#FBEAF0'};
 
-function fmt(n){return '₦'+Math.round(n||0).toLocaleString('en-NG')}
-function fmtDate(s){if(!s)return '—';return new Date(s).toLocaleDateString('en-NG',{day:'2-digit',month:'short',year:'2-digit'})}
-function getMonth(d){const dt=new Date(d);return `${dt.getFullYear()}-${dt.getMonth()+1}`}
+let SESSION = null;
+let JOBS = [];
+let ACTIVE_TAB = 'dashboard';
 
-// ── AUTH ────────────────────────────────────────────────────
-function Auth(){
-  const [email,setEmail]=useState('');
-  const [pass,setPass]=useState('');
-  const [mode,setMode]=useState('login');
-  const [loading,setLoading]=useState(false);
-  const [msg,setMsg]=useState('');
-  const [err,setErr]=useState('');
+function N(n){ return '₦' + Math.round(n||0).toLocaleString('en-NG'); }
+function fmtD(s){ if(!s)return '—'; return new Date(s).toLocaleDateString('en-NG',{day:'2-digit',month:'short',year:'2-digit'}); }
+function getMonth(d){ const dt=new Date(d); return dt.getFullYear()+'-'+(dt.getMonth()+1); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  async function submit(e){
-    e.preventDefault();setLoading(true);setErr('');setMsg('');
-    if(mode==='login'){
-      const {error}=await sb.auth.signInWithPassword({email,password:pass});
-      if(error)setErr(error.message);
-    } else {
-      const {error}=await sb.auth.signUp({email,password:pass});
-      if(error)setErr(error.message);
-      else setMsg('Account created! Check your email to confirm, then log in.');
-    }
-    setLoading(false);
-  }
-
-  return (
-    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#f7f7f5',padding:20}}>
-      <div style={{background:'#fff',borderRadius:14,border:'1px solid #e5e5e5',padding:'36px 32px',width:'100%',maxWidth:380}}>
-        <div style={{textAlign:'center',marginBottom:28}}>
-          <div style={{width:44,height:44,background:'#0F6E56',borderRadius:10,color:'#fff',fontSize:22,fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 12px'}}>C</div>
-          <div style={{fontSize:20,fontWeight:600,letterSpacing:-.3}}>Creativlog</div>
-          <div style={{fontSize:13,color:'#888',marginTop:4}}>{mode==='login'?'Sign in to your workspace':'Create your account'}</div>
-        </div>
-        <form onSubmit={submit}>
-          <div style={{marginBottom:14}}>
-            <label style={{fontSize:12,color:'#555',fontWeight:500,display:'block',marginBottom:5}}>Email</label>
-            <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@email.com" required/>
-          </div>
-          <div style={{marginBottom:20}}>
-            <label style={{fontSize:12,color:'#555',fontWeight:500,display:'block',marginBottom:5}}>Password</label>
-            <input type="password" value={pass} onChange={e=>setPass(e.target.value)} placeholder="••••••••" required minLength={6}/>
-          </div>
-          {err&&<div className="toast error" style={{marginBottom:14}}>{err}</div>}
-          {msg&&<div className="toast success" style={{marginBottom:14}}>{msg}</div>}
-          <button type="submit" className="btn-primary" style={{width:'100%'}} disabled={loading}>
-            {loading?'Please wait...':(mode==='login'?'Sign in':'Create account')}
-          </button>
-        </form>
-        <div style={{textAlign:'center',marginTop:18,fontSize:13,color:'#888'}}>
-          {mode==='login'?"Don't have an account? ":"Already have an account? "}
-          <button onClick={()=>{setMode(mode==='login'?'signup':'login');setErr('');setMsg('')}}
-            style={{background:'none',border:'none',color:'#0F6E56',fontWeight:500,cursor:'pointer',fontSize:13,padding:0}}>
-            {mode==='login'?'Sign up':'Sign in'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── DASHBOARD ───────────────────────────────────────────────
-function Dashboard({jobs,loading}){
-  const stats=useMemo(()=>{
-    if(!jobs.length)return null;
-    const now=new Date();
-    const curMonth=`${now.getFullYear()}-${now.getMonth()+1}`;
-    const pd=new Date(now.getFullYear(),now.getMonth()-1,1);
-    const prevMonth=`${pd.getFullYear()}-${pd.getMonth()+1}`;
-    const curIncome=jobs.filter(j=>j.month===curMonth).reduce((a,j)=>a+(j.income||0),0);
-    const prevIncome=jobs.filter(j=>j.month===prevMonth).reduce((a,j)=>a+(j.income||0),0);
-    const totalIncome=jobs.reduce((a,j)=>a+(j.income||0),0);
-    const avgJob=jobs.length?totalIncome/jobs.length:0;
-    const diff=prevIncome?((curIncome-prevIncome)/prevIncome*100):0;
-    const curJobCount=jobs.filter(j=>j.month===curMonth).length;
-    const catData=CATS.map(c=>({name:c,value:jobs.filter(j=>j.category===c).reduce((a,j)=>a+(j.income||0),0),color:CAT_COLORS[c]})).filter(c=>c.value>0);
-    const monthMap={};
-    jobs.forEach(j=>{if(!j.month)return;if(!monthMap[j.month])monthMap[j.month]=0;monthMap[j.month]+=(j.income||0);});
-    const monthData=Object.keys(monthMap).sort().map(m=>{const[y,mo]=m.split('-');return{month:new Date(+y,+mo-1).toLocaleDateString('en-NG',{month:'short',year:'2-digit'}),income:monthMap[m]};});
-    const cm={};
-    jobs.forEach(j=>{if(!j.client)return;if(!cm[j.client])cm[j.client]={name:j.client,income:0,count:0};cm[j.client].income+=(j.income||0);cm[j.client].count++;});
-    const topClients=Object.values(cm).sort((a,b)=>b.income-a.income).slice(0,6);
-    return{curIncome,prevIncome,diff,totalIncome,avgJob,jobCount:jobs.length,curJobCount,catData,monthData,topClients};
-  },[jobs]);
-
-  if(loading)return <div style={{padding:40,color:'#888',textAlign:'center'}}>Loading dashboard...</div>;
-
-  return(
-    <div className="page">
-      <div style={{marginBottom:28}}>
-        <div className="page-title">Dashboard</div>
-        <div className="page-sub">{new Date().toLocaleDateString('en-NG',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>
-      </div>
-      {!stats?(
-        <div className="empty-state"><div className="empty-icon">📋</div><div style={{fontSize:16,fontWeight:500}}>No jobs yet</div><div style={{fontSize:13,marginTop:4}}>Log your first job to see your dashboard</div></div>
-      ):(
-        <>
-          <div className="metric-grid">
-            <div className="metric-card"><div className="metric-label">This month</div><div className="metric-value">{fmt(stats.curIncome)}</div><div className="metric-sub" style={{color:stats.diff>=0?'#0F6E56':'#D85A30'}}>{stats.diff>=0?'↑':'↓'} {Math.abs(stats.diff).toFixed(0)}% vs last month</div></div>
-            <div className="metric-card"><div className="metric-label">Total revenue</div><div className="metric-value">{fmt(stats.totalIncome)}</div><div className="metric-sub">{stats.jobCount} jobs total</div></div>
-            <div className="metric-card"><div className="metric-label">Avg job value</div><div className="metric-value">{fmt(stats.avgJob)}</div><div className="metric-sub">per job</div></div>
-            <div className="metric-card"><div className="metric-label">Jobs this month</div><div className="metric-value">{stats.curJobCount}</div><div className="metric-sub">logged</div></div>
-          </div>
-          <div className="charts-row">
-            <div className="chart-card">
-              <div className="chart-title">Monthly income</div>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={stats.monthData} margin={{top:4,right:4,left:0,bottom:20}}>
-                  <XAxis dataKey="month" tick={{fontSize:11,fill:'#888'}} angle={-35} textAnchor="end" interval={0}/>
-                  <YAxis tick={{fontSize:11,fill:'#888'}} tickFormatter={v=>'₦'+(v>=1000?(v/1000).toFixed(0)+'k':v)} width={46}/>
-                  <Tooltip formatter={v=>fmt(v)} contentStyle={{fontSize:12,borderRadius:8,border:'1px solid #e5e5e5'}}/>
-                  <Bar dataKey="income" fill="#1D9E75" radius={[4,4,0,0]}/>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="chart-card">
-              <div className="chart-title">Income by category</div>
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart>
-                  <Pie data={stats.catData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={70} innerRadius={40}>
-                    {stats.catData.map((c,i)=><Cell key={i} fill={c.color}/>)}
-                  </Pie>
-                  <Tooltip formatter={v=>fmt(v)} contentStyle={{fontSize:12,borderRadius:8,border:'1px solid #e5e5e5'}}/>
-                  <Legend iconSize={10} iconType="square" wrapperStyle={{fontSize:11}}/>
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          <div className="chart-card">
-            <div className="chart-title">Top clients by revenue</div>
-            {stats.topClients.map((c,i)=>(
-              <div key={i} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 0',borderBottom:i<stats.topClients.length-1?'1px solid #f0f0f0':'none'}}>
-                <div style={{display:'flex',alignItems:'center',gap:10}}>
-                  <div style={{width:28,height:28,borderRadius:'50%',background:'#E1F5EE',color:'#0F6E56',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,fontWeight:600}}>{c.name.charAt(0).toUpperCase()}</div>
-                  <div><div style={{fontSize:13,fontWeight:500}}>{c.name}</div><div style={{fontSize:11,color:'#888'}}>{c.count} job{c.count!==1?'s':''}</div></div>
-                </div>
-                <div style={{fontSize:14,fontWeight:600,color:'#0F6E56'}}>{fmt(c.income)}</div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-// ── LOG JOB ─────────────────────────────────────────────────
-function LogJob({onAdd,onDone}){
-  const today=new Date().toISOString().split('T')[0];
-  const [form,setForm]=useState({date:today,client:'',category:'FLYER DESIGN',income:'',org_price:'',source:'Inbound Client',description:''});
-  const [loading,setLoading]=useState(false);
-  const [success,setSuccess]=useState(false);
-  const [err,setErr]=useState('');
-
-  function set(f,v){setForm(p=>({...p,[f]:v}))}
-
-  async function submit(e){
-    e.preventDefault();
-    if(!form.client.trim()){setErr('Client name is required.');return}
-    if(!form.income||isNaN(form.income)||+form.income<=0){setErr('Enter a valid income amount.');return}
-    setLoading(true);setErr('');
-    const job={date:form.date,client:form.client.trim(),job_type:form.category,income:+form.income,org_price:+(form.org_price)||0,source:form.source,description:form.description.trim(),category:form.category,month:getMonth(form.date)};
-    const result=await onAdd(job);
-    setLoading(false);
-    if(result.success){setSuccess(true);setForm({date:today,client:'',category:'FLYER DESIGN',income:'',org_price:'',source:'Inbound Client',description:''});setTimeout(()=>setSuccess(false),3000);}
-    else setErr('Failed to save. Please try again.');
-  }
-
-  const lbl={fontSize:12,color:'#555',fontWeight:500};
-
-  return(
-    <div className="page">
-      <div className="page-title">Log a job</div>
-      <div className="page-sub">Month and totals update automatically.</div>
-      <div className="form-card">
-        {success&&<div className="toast success">✓ Job saved! Dashboard has been updated.</div>}
-        {err&&<div className="toast error">{err}</div>}
-        <form onSubmit={submit}>
-          <div className="form-grid">
-            <div className="form-group"><label style={lbl}>Client name *</label><input value={form.client} onChange={e=>set('client',e.target.value)} placeholder="e.g. Dsiner Mokola"/></div>
-            <div className="form-group"><label style={lbl}>Date *</label><input type="date" value={form.date} onChange={e=>set('date',e.target.value)}/></div>
-            <div className="form-group"><label style={lbl}>Category *</label><select value={form.category} onChange={e=>set('category',e.target.value)}>{CATS.map(c=><option key={c}>{c}</option>)}</select></div>
-            <div className="form-group"><label style={lbl}>Income (₦) *</label><input type="number" value={form.income} onChange={e=>set('income',e.target.value)} placeholder="e.g. 8000" min="0"/></div>
-            <div className="form-group"><label style={lbl}>Original quoted price (₦)</label><input type="number" value={form.org_price} onChange={e=>set('org_price',e.target.value)} placeholder="0 if same" min="0"/></div>
-            <div className="form-group"><label style={lbl}>Source</label><select value={form.source} onChange={e=>set('source',e.target.value)}>{SOURCES.map(s=><option key={s}>{s}</option>)}</select></div>
-            <div className="form-group full"><label style={lbl}>Description</label><textarea value={form.description} onChange={e=>set('description',e.target.value)} placeholder="Brief description of the job..."/></div>
-          </div>
-          <div style={{display:'flex',gap:10,marginTop:24}}>
-            <button type="submit" className="btn-primary" style={{flex:1}} disabled={loading}>{loading?'Saving...':'✓ Save job'}</button>
-            <button type="button" className="btn-ghost" onClick={onDone}>View all jobs</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-// ── JOBS LIST ───────────────────────────────────────────────
-function JobsList({jobs,loading,onDelete}){
-  const [search,setSearch]=useState('');
-  const [catF,setCatF]=useState('ALL');
-  const [srcF,setSrcF]=useState('ALL');
-  const [deleting,setDeleting]=useState(null);
-
-  const filtered=useMemo(()=>jobs.filter(j=>{
-    const mc=catF==='ALL'||j.category===catF;
-    const ms=srcF==='ALL'||j.source===srcF;
-    const q=search.toLowerCase();
-    const mq=!q||(j.client||'').toLowerCase().includes(q)||(j.description||'').toLowerCase().includes(q);
-    return mc&&ms&&mq;
-  }),[jobs,search,catF,srcF]);
-
-  const total=filtered.reduce((a,j)=>a+(j.income||0),0);
-
-  async function del(id){
-    if(!window.confirm('Delete this job?'))return;
-    setDeleting(id);await onDelete(id);setDeleting(null);
-  }
-
-  if(loading)return <div style={{padding:40,color:'#888',textAlign:'center'}}>Loading jobs...</div>;
-
-  return(
-    <div className="page">
-      <div style={{marginBottom:20}}>
-        <div className="page-title">All jobs</div>
-        <div className="page-sub">{jobs.length} jobs · {fmt(jobs.reduce((a,j)=>a+(j.income||0),0))} total</div>
-      </div>
-      <div className="filter-row">
-        <input placeholder="Search client or description..." value={search} onChange={e=>setSearch(e.target.value)}/>
-        <select value={catF} onChange={e=>setCatF(e.target.value)}><option value="ALL">All categories</option>{CATS.map(c=><option key={c}>{c}</option>)}</select>
-        <select value={srcF} onChange={e=>setSrcF(e.target.value)}><option value="ALL">All sources</option>{SOURCES.map(s=><option key={s}>{s}</option>)}</select>
-      </div>
-      {filtered.length===0?(
-        <div className="empty-state"><div className="empty-icon">{jobs.length===0?'📋':'🔍'}</div><div>{jobs.length===0?'No jobs logged yet.':'No jobs match your filters.'}</div></div>
-      ):(
-        <>
-          <div style={{background:'#fff',border:'1px solid #e5e5e5',borderRadius:12,overflow:'hidden'}}>
-            <div style={{overflowX:'auto'}}>
-              <table className="jobs-table">
-                <thead>
-                  <tr>
-                    <th style={{width:90}}>Date</th>
-                    <th style={{width:120}}>Client</th>
-                    <th>Description</th>
-                    <th style={{width:130}}>Category</th>
-                    <th style={{width:80}}>Source</th>
-                    <th style={{width:100,textAlign:'right'}}>Income</th>
-                    <th style={{width:40}}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((j,i)=>(
-                    <tr key={j.id||i}>
-                      <td style={{color:'#888',whiteSpace:'nowrap'}}>{fmtDate(j.date)}</td>
-                      <td style={{fontWeight:500}}>{j.client||'—'}</td>
-                      <td style={{color:'#555',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',maxWidth:200}}>{j.description||'—'}</td>
-                      <td><span className="cat-badge" style={{background:CAT_BG[j.category]||'#f0f0f0',color:CAT_COLORS[j.category]||'#555'}}>{j.category}</span></td>
-                      <td style={{color:'#888',fontSize:12}}>{j.source||'—'}</td>
-                      <td style={{fontWeight:600,color:'#0F6E56',textAlign:'right',whiteSpace:'nowrap'}}>{fmt(j.income||0)}</td>
-                      <td><button onClick={()=>del(j.id)} disabled={deleting===j.id} style={{background:'none',border:'none',color:'#ccc',cursor:'pointer',fontSize:18,padding:'0 4px',lineHeight:1}}>{deleting===j.id?'…':'×'}</button></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div style={{marginTop:12,textAlign:'right',fontSize:13,color:'#555'}}>
-            Showing {filtered.length} jobs · <strong style={{color:'#0F6E56'}}>{fmt(total)}</strong>
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-// ── APP ─────────────────────────────────────────────────────
-function App(){
-  const [session,setSession]=useState(null);
-  const [loading,setLoading]=useState(true);
-  const [tab,setTab]=useState('dashboard');
-  const [jobs,setJobs]=useState([]);
-  const [jobsLoading,setJobsLoading]=useState(false);
-
-  useEffect(()=>{
-    sb.auth.getSession().then(({data:{session}})=>{setSession(session);setLoading(false);});
-    const {data:{subscription}}=sb.auth.onAuthStateChange((_,s)=>setSession(s));
-    return()=>subscription.unsubscribe();
-  },[]);
-
-  useEffect(()=>{if(session)fetchJobs();},[session]);
-
-  async function fetchJobs(){
-    setJobsLoading(true);
-    const{data,error}=await sb.from('jobs').select('*').order('date',{ascending:false});
-    if(!error&&data)setJobs(data);
-    setJobsLoading(false);
-  }
-
-  async function addJob(job){
-    const{data,error}=await sb.from('jobs').insert([job]).select();
-    if(!error&&data){setJobs(p=>[data[0],...p]);return{success:true};}
-    return{success:false,error};
-  }
-
-  async function deleteJob(id){
-    const{error}=await sb.from('jobs').delete().eq('id',id);
-    if(!error)setJobs(p=>p.filter(j=>j.id!==id));
-  }
-
-  if(loading)return <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh'}}><div className="spinner"/></div>;
-  if(!session)return <Auth/>;
-
-  const navItems=[{key:'dashboard',label:'Dashboard',icon:'▣'},{key:'log',label:'Log Job',icon:'+'},{key:'jobs',label:'All Jobs',icon:'≡'}];
-
-  return(
-    <div className="app-shell">
-      <aside className="sidebar">
-        <div className="sidebar-brand"><div className="brand-icon">C</div><span className="brand-name">Creativlog</span></div>
-        <nav className="sidebar-nav">
-          {navItems.map(n=>(
-            <button key={n.key} className={`nav-item${tab===n.key?' active':''}`} onClick={()=>setTab(n.key)}>
-              <span style={{fontSize:16,width:18,textAlign:'center'}}>{n.icon}</span><span>{n.label}</span>
-            </button>
-          ))}
+// ── RENDER ─────────────────────────────────
+function render(){
+  if(!SESSION){ renderAuth(); return; }
+  const nav = `
+    <div id="app" style="display:flex;min-height:100vh">
+      <aside class="sidebar">
+        <div class="brand"><div class="brand-icon">C</div><span class="brand-name">Creativlog</span></div>
+        <nav class="nav">
+          ${['dashboard','log','jobs'].map(t=>`
+            <button class="nav-btn${ACTIVE_TAB===t?' active':''}" onclick="switchTab('${t}')">
+              ${t==='dashboard'?'▣':t==='log'?'+':'≡'} ${t==='dashboard'?'Dashboard':t==='log'?'Log Job':'All Jobs'}
+            </button>`).join('')}
         </nav>
-        <div className="sidebar-footer">
-          <div className="sidebar-user">
-            <div className="user-avatar">SD</div>
-            <div><div style={{fontSize:13,fontWeight:500}}>Samad Designs</div><div style={{fontSize:11,color:'#888',overflow:'hidden',textOverflow:'ellipsis',maxWidth:130}}>{session.user.email}</div></div>
+        <div class="sidebar-foot">
+          <div class="user-row">
+            <div class="avatar">SD</div>
+            <div>
+              <div style="font-size:13px;font-weight:500">Samad Designs</div>
+              <div style="font-size:11px;color:#888;overflow:hidden;text-overflow:ellipsis;max-width:130px">${esc(SESSION.user.email)}</div>
+            </div>
           </div>
-          <button className="btn-ghost" style={{width:'100%',marginTop:10,fontSize:12}} onClick={()=>sb.auth.signOut()}>Sign out</button>
+          <button class="btn-ghost" style="width:100%;font-size:12px" onclick="signOut()">Sign out</button>
         </div>
       </aside>
-      <main className="main-content">
-        <div className="mobile-topbar">
-          <span className="brand-name">Creativlog</span>
-          <div className="mobile-nav">
-            {navItems.map(n=><button key={n.key} className={`mobile-nav-btn${tab===n.key?' active':''}`} onClick={()=>setTab(n.key)}>{n.label}</button>)}
+      <main class="main">
+        <div class="mob-bar">
+          <span class="brand-name">Creativlog</span>
+          <div class="mob-nav">
+            ${['dashboard','log','jobs'].map(t=>`<button class="mob-nav-btn${ACTIVE_TAB===t?' active':''}" onclick="switchTab('${t}')">${t==='dashboard'?'Dashboard':t==='log'?'Log Job':'All Jobs'}</button>`).join('')}
           </div>
         </div>
-        <div style={{padding:tab==='dashboard'||tab==='log'||tab==='jobs'?'0':'0'}}>
-          {tab==='dashboard'&&<Dashboard jobs={jobs} loading={jobsLoading}/>}
-          {tab==='log'&&<LogJob onAdd={addJob} onDone={()=>setTab('jobs')}/>}
-          {tab==='jobs'&&<JobsList jobs={jobs} loading={jobsLoading} onDelete={deleteJob}/>}
-        </div>
+        <div id="page-content"></div>
       </main>
-    </div>
-  );
+    </div>`;
+  document.getElementById('app').outerHTML = nav;
+  renderPage();
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+function renderPage(){
+  const el = document.getElementById('page-content');
+  if(!el) return;
+  if(ACTIVE_TAB==='dashboard') el.innerHTML = dashboardHTML();
+  if(ACTIVE_TAB==='log')       el.innerHTML = logJobHTML();
+  if(ACTIVE_TAB==='jobs')      el.innerHTML = jobsHTML();
+  if(ACTIVE_TAB==='dashboard') drawCharts();
+}
+
+function switchTab(t){
+  ACTIVE_TAB = t;
+  document.querySelectorAll('.nav-btn,.mob-nav-btn').forEach(b=>{
+    b.classList.toggle('active', b.textContent.trim().toLowerCase().startsWith(t==='dashboard'?'▣':t==='log'?'+':'≡') || b.textContent.trim().toLowerCase().includes(t==='dashboard'?'dash':t==='log'?'log':'all'));
+  });
+  // simpler: just re-render nav active state
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['dashboard','log','jobs'][i]===t);
+  });
+  document.querySelectorAll('.mob-nav-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['dashboard','log','jobs'][i]===t);
+  });
+  renderPage();
+}
+
+// ── AUTH ───────────────────────────────────
+function renderAuth(){
+  document.getElementById('app').innerHTML = `
+    <div class="auth-wrap">
+      <div class="auth-card">
+        <div style="text-align:center;margin-bottom:28px">
+          <div style="width:44px;height:44px;background:#0F6E56;border-radius:10px;color:#fff;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">C</div>
+          <div style="font-size:20px;font-weight:600">Creativlog</div>
+          <div style="font-size:13px;color:#888;margin-top:4px" id="auth-sub">Sign in to your workspace</div>
+        </div>
+        <div id="auth-msg"></div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;color:#555;font-weight:500;display:block;margin-bottom:5px">Email</label>
+          <input type="email" id="auth-email" placeholder="you@email.com"/>
+        </div>
+        <div style="margin-bottom:20px">
+          <label style="font-size:12px;color:#555;font-weight:500;display:block;margin-bottom:5px">Password</label>
+          <input type="password" id="auth-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doAuth()"/>
+        </div>
+        <button class="btn-green" style="width:100%" id="auth-btn" onclick="doAuth()">Sign in</button>
+        <div style="text-align:center;margin-top:16px;font-size:13px;color:#888">
+          <span id="auth-switch-text">Don't have an account?</span>
+          <button onclick="toggleAuthMode()" style="background:none;border:none;color:#0F6E56;font-weight:500;cursor:pointer;font-size:13px;padding:0 4px" id="auth-switch-btn">Sign up</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+let authMode = 'login';
+function toggleAuthMode(){
+  authMode = authMode==='login'?'signup':'login';
+  document.getElementById('auth-sub').textContent = authMode==='login'?'Sign in to your workspace':'Create your account';
+  document.getElementById('auth-btn').textContent = authMode==='login'?'Sign in':'Create account';
+  document.getElementById('auth-switch-text').textContent = authMode==='login'?"Don't have an account?":'Already have an account?';
+  document.getElementById('auth-switch-btn').textContent = authMode==='login'?'Sign up':'Sign in';
+  document.getElementById('auth-msg').innerHTML='';
+}
+
+async function doAuth(){
+  const email = document.getElementById('auth-email').value;
+  const pass  = document.getElementById('auth-pass').value;
+  const btn   = document.getElementById('auth-btn');
+  if(!email||!pass){showAuthMsg('Please fill in both fields.','err');return;}
+  btn.textContent='Please wait...'; btn.disabled=true;
+  if(authMode==='login'){
+    const {error} = await sb.auth.signInWithPassword({email,password:pass});
+    if(error){showAuthMsg(error.message,'err');btn.textContent='Sign in';btn.disabled=false;}
+  } else {
+    const {error} = await sb.auth.signUp({email,password:pass});
+    if(error){showAuthMsg(error.message,'err');btn.textContent='Create account';btn.disabled=false;}
+    else{showAuthMsg('Account created! Check your email to confirm, then sign in.','ok');btn.textContent='Create account';btn.disabled=false;}
+  }
+}
+function showAuthMsg(msg,type){
+  document.getElementById('auth-msg').innerHTML=`<div class="toast ${type}" style="margin-bottom:14px">${esc(msg)}</div>`;
+}
+
+async function signOut(){ await sb.auth.signOut(); }
+
+// ── DASHBOARD ──────────────────────────────
+function dashboardHTML(){
+  const now = new Date();
+  const cm  = now.getFullYear()+'-'+(now.getMonth()+1);
+  const pd  = new Date(now.getFullYear(), now.getMonth()-1, 1);
+  const pm  = pd.getFullYear()+'-'+(pd.getMonth()+1);
+  const curInc  = JOBS.filter(j=>j.month===cm).reduce((a,j)=>a+(j.income||0),0);
+  const prevInc = JOBS.filter(j=>j.month===pm).reduce((a,j)=>a+(j.income||0),0);
+  const total   = JOBS.reduce((a,j)=>a+(j.income||0),0);
+  const avg     = JOBS.length ? total/JOBS.length : 0;
+  const diff    = prevInc ? ((curInc-prevInc)/prevInc*100) : 0;
+  const curCnt  = JOBS.filter(j=>j.month===cm).length;
+  const diffTxt = `${diff>=0?'↑':'↓'} ${Math.abs(diff).toFixed(0)}% vs last month`;
+  const diffCol = diff>=0?'#0F6E56':'#D85A30';
+
+  if(!JOBS.length) return `<div class="pg-title">Dashboard</div><div class="pg-sub">${new Date().toLocaleDateString('en-NG',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div><div class="empty"><div style="font-size:36px">📋</div><div style="font-size:16px;font-weight:500;margin-top:10px">No jobs yet</div><div style="font-size:13px;margin-top:4px">Log your first job to see your dashboard</div></div>`;
+
+  // top clients
+  const cm2={};
+  JOBS.forEach(j=>{if(!j.client)return;if(!cm2[j.client])cm2[j.client]={n:j.client,inc:0,cnt:0};cm2[j.client].inc+=(j.income||0);cm2[j.client].cnt++;});
+  const top = Object.values(cm2).sort((a,b)=>b.inc-a.inc).slice(0,5);
+
+  return `
+    <div class="pg-title">Dashboard</div>
+    <div class="pg-sub">${new Date().toLocaleDateString('en-NG',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>
+    <div class="metric-grid">
+      <div class="mcard"><div class="mlabel">This month</div><div class="mval">${N(curInc)}</div><div class="msub" style="color:${diffCol}">${diffTxt}</div></div>
+      <div class="mcard"><div class="mlabel">Total revenue</div><div class="mval">${N(total)}</div><div class="msub">${JOBS.length} jobs total</div></div>
+      <div class="mcard"><div class="mlabel">Avg job value</div><div class="mval">${N(avg)}</div><div class="msub">per job</div></div>
+      <div class="mcard"><div class="mlabel">Jobs this month</div><div class="mval">${curCnt}</div><div class="msub">logged</div></div>
+    </div>
+    <div class="charts-row">
+      <div class="card"><div class="card-title">Monthly income</div><canvas id="chart-month" height="180"></canvas></div>
+      <div class="card"><div class="card-title">Income by category</div><canvas id="chart-cat" height="180"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Top clients by revenue</div>
+      ${top.map((c,i)=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;${i<top.length-1?'border-bottom:1px solid #f0f0f0':''}">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#E1F5EE;color:#0F6E56;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">${esc(c.n.charAt(0).toUpperCase())}</div>
+            <div><div style="font-size:13px;font-weight:500">${esc(c.n)}</div><div style="font-size:11px;color:#888">${c.cnt} job${c.cnt!==1?'s':''}</div></div>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:#0F6E56">${N(c.inc)}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function drawCharts(){
+  // monthly bar
+  const mmap={};
+  JOBS.forEach(j=>{if(!j.month)return;if(!mmap[j.month])mmap[j.month]=0;mmap[j.month]+=(j.income||0);});
+  const mkeys=Object.keys(mmap).sort();
+  const mlabels=mkeys.map(m=>{const[y,mo]=m.split('-');return new Date(+y,+mo-1).toLocaleDateString('en-NG',{month:'short',year:'2-digit'});});
+  const mvals=mkeys.map(m=>mmap[m]);
+
+  const mc=document.getElementById('chart-month');
+  if(mc){
+    const ctx=mc.getContext('2d');
+    const barW=Math.max(20,Math.min(40,(mc.offsetWidth-60)/Math.max(mvals.length,1)));
+    const maxV=Math.max(...mvals,1);
+    mc.width=mc.offsetWidth||400; mc.height=180;
+    ctx.clearRect(0,0,mc.width,mc.height);
+    const padL=50,padB=40,padT=10,padR=10;
+    const chartW=mc.width-padL-padR, chartH=mc.height-padB-padT;
+    // grid lines
+    ctx.strokeStyle='#f0f0f0';ctx.lineWidth=1;
+    [0,.25,.5,.75,1].forEach(f=>{
+      const y=padT+chartH*(1-f);
+      ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+chartW,y);ctx.stroke();
+      ctx.fillStyle='#aaa';ctx.font='10px DM Sans,sans-serif';ctx.textAlign='right';
+      ctx.fillText('₦'+(Math.round(maxV*f/1000))+'k',padL-4,y+3);
+    });
+    // bars
+    const bw=Math.min(barW,chartW/mvals.length*0.6);
+    const spacing=chartW/mvals.length;
+    mvals.forEach((v,i)=>{
+      const x=padL+spacing*i+(spacing-bw)/2;
+      const bh=(v/maxV)*chartH;
+      const y=padT+chartH-bh;
+      ctx.fillStyle='#1D9E75';
+      roundRect(ctx,x,y,bw,bh,4);
+      ctx.fillStyle='#888';ctx.font='9px DM Sans,sans-serif';ctx.textAlign='center';
+      ctx.fillText(mlabels[i]||'',x+bw/2,mc.height-4);
+    });
+  }
+
+  // category donut
+  const catvals=CATS.map(c=>JOBS.filter(j=>j.category===c).reduce((a,j)=>a+(j.income||0),0));
+  const total=catvals.reduce((a,v)=>a+v,0)||1;
+  const catc=document.getElementById('chart-cat');
+  if(catc){
+    catc.width=catc.offsetWidth||300; catc.height=180;
+    const ctx=catc.getContext('2d');
+    ctx.clearRect(0,0,catc.width,catc.height);
+    const cx=catc.width/2-40, cy=80, R=60, r=30;
+    let angle=-Math.PI/2;
+    const colors=Object.values(CC);
+    catvals.forEach((v,i)=>{
+      if(!v)return;
+      const slice=(v/total)*Math.PI*2;
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,R,angle,angle+slice);ctx.closePath();
+      ctx.fillStyle=colors[i];ctx.fill();
+      angle+=slice;
+    });
+    // hole
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+    // legend
+    CATS.forEach((c,i)=>{
+      if(!catvals[i])return;
+      const ly=20+i*22;
+      ctx.fillStyle=colors[i];ctx.fillRect(catc.width-75,ly,10,10);
+      ctx.fillStyle='#555';ctx.font='10px DM Sans,sans-serif';ctx.textAlign='left';
+      ctx.fillText(c.replace(' DESIGN',''),catc.width-60,ly+9);
+    });
+  }
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();ctx.fill();
+}
+
+// ── LOG JOB ────────────────────────────────
+function logJobHTML(){
+  const today=new Date().toISOString().split('T')[0];
+  return `
+    <div class="pg-title">Log a job</div>
+    <div class="pg-sub">Month and totals update automatically.</div>
+    <div class="form-wrap">
+      <div id="log-msg"></div>
+      <div class="form-grid">
+        <div class="fgroup"><label class="flabel">Client name *</label><input id="f-client" placeholder="e.g. Dsiner Mokola"/></div>
+        <div class="fgroup"><label class="flabel">Date *</label><input type="date" id="f-date" value="${today}"/></div>
+        <div class="fgroup"><label class="flabel">Category *</label><select id="f-cat">${CATS.map(c=>`<option>${c}</option>`).join('')}</select></div>
+        <div class="fgroup"><label class="flabel">Income (₦) *</label><input type="number" id="f-income" placeholder="e.g. 8000" min="0"/></div>
+        <div class="fgroup"><label class="flabel">Original quoted price (₦)</label><input type="number" id="f-org" placeholder="0 if same" min="0"/></div>
+        <div class="fgroup"><label class="flabel">Source</label><select id="f-src">${SRCS.map(s=>`<option>${s}</option>`).join('')}</select></div>
+        <div class="fgroup full"><label class="flabel">Description</label><textarea id="f-desc" placeholder="Brief description..."></textarea></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button class="btn-green" style="flex:1" onclick="saveJob()">✓ Save job</button>
+        <button class="btn-ghost" onclick="switchTab('jobs')">View all jobs</button>
+      </div>
+    </div>`;
+}
+
+async function saveJob(){
+  const client = document.getElementById('f-client').value.trim();
+  const date   = document.getElementById('f-date').value;
+  const cat    = document.getElementById('f-cat').value;
+  const income = parseFloat(document.getElementById('f-income').value)||0;
+  const org    = parseFloat(document.getElementById('f-org').value)||0;
+  const src    = document.getElementById('f-src').value;
+  const desc   = document.getElementById('f-desc').value.trim();
+  const msgEl  = document.getElementById('log-msg');
+
+  if(!client){msgEl.innerHTML='<div class="toast err">Client name is required.</div>';return;}
+  if(!income){msgEl.innerHTML='<div class="toast err">Enter a valid income amount.</div>';return;}
+
+  msgEl.innerHTML='<div class="toast ok">Saving...</div>';
+  const job={date,client,job_type:cat,income,org_price:org,source:src,description:desc,category:cat,month:getMonth(date)};
+  const {data,error}=await sb.from('jobs').insert([job]).select();
+  if(error){msgEl.innerHTML=`<div class="toast err">Error: ${esc(error.message)}</div>`;return;}
+  JOBS.unshift(data[0]);
+  msgEl.innerHTML='<div class="toast ok">✓ Job saved! Dashboard updated.</div>';
+  document.getElementById('f-client').value='';
+  document.getElementById('f-income').value='';
+  document.getElementById('f-org').value='';
+  document.getElementById('f-desc').value='';
+  setTimeout(()=>{if(document.getElementById('log-msg'))document.getElementById('log-msg').innerHTML='';},3000);
+}
+
+// ── JOBS LIST ──────────────────────────────
+function jobsHTML(){
+  return `
+    <div class="pg-title">All jobs</div>
+    <div class="pg-sub">${JOBS.length} jobs · ${N(JOBS.reduce((a,j)=>a+(j.income||0),0))} total</div>
+    <div class="filter-row">
+      <input id="j-search" placeholder="Search client or description..." oninput="filterJobs()"/>
+      <select id="j-cat" onchange="filterJobs()"><option value="">All categories</option>${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+      <select id="j-src" onchange="filterJobs()"><option value="">All sources</option>${SRCS.map(s=>`<option>${s}</option>`).join('')}</select>
+    </div>
+    <div id="jobs-table-wrap"></div>`;
+}
+
+function filterJobs(){
+  const q   = (document.getElementById('j-search')||{value:''}).value.toLowerCase();
+  const cat = (document.getElementById('j-cat')||{value:''}).value;
+  const src = (document.getElementById('j-src')||{value:''}).value;
+  const filtered = JOBS.filter(j=>{
+    const mc=!cat||j.category===cat;
+    const ms=!src||j.source===src;
+    const mq=!q||(j.client||'').toLowerCase().includes(q)||(j.description||'').toLowerCase().includes(q);
+    return mc&&ms&&mq;
+  });
+  const wrap=document.getElementById('jobs-table-wrap');
+  if(!wrap)return;
+  if(!filtered.length){wrap.innerHTML='<div class="empty">'+(!JOBS.length?'📋 No jobs logged yet.':'🔍 No jobs match your filters.')+'</div>';return;}
+  const total=filtered.reduce((a,j)=>a+(j.income||0),0);
+  wrap.innerHTML=`
+    <div style="background:#fff;border:1px solid #e5e5e5;border-radius:12px;overflow:hidden">
+      <div style="overflow-x:auto">
+        <table class="tbl">
+          <thead><tr><th style="width:90px">Date</th><th style="width:120px">Client</th><th>Description</th><th style="width:130px">Category</th><th style="width:95px;text-align:right">Income</th><th style="width:36px"></th></tr></thead>
+          <tbody>
+            ${filtered.map(j=>`
+              <tr>
+                <td style="color:#888;white-space:nowrap">${fmtD(j.date)}</td>
+                <td style="font-weight:500">${esc(j.client||'—')}</td>
+                <td style="color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px">${esc(j.description||'—')}</td>
+                <td><span class="badge" style="background:${CB[j.category]||'#f0f0f0'};color:${CC[j.category]||'#555'}">${esc(j.category)}</span></td>
+                <td style="font-weight:600;color:#0F6E56;text-align:right;white-space:nowrap">${N(j.income||0)}</td>
+                <td><button onclick="delJob('${j.id}')" style="background:none;border:none;color:#ccc;cursor:pointer;font-size:18px;padding:0 2px;line-height:1">×</button></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="margin-top:10px;text-align:right;font-size:13px;color:#555">Showing ${filtered.length} jobs · <strong style="color:#0F6E56">${N(total)}</strong></div>`;
+}
+
+async function delJob(id){
+  if(!confirm('Delete this job?'))return;
+  const{error}=await sb.from('jobs').delete().eq('id',id);
+  if(!error){JOBS=JOBS.filter(j=>j.id!==id);filterJobs();}
+}
+
+// ── INIT ───────────────────────────────────
+sb.auth.onAuthStateChange(async(_,session)=>{
+  SESSION=session;
+  if(session){
+    const{data}=await sb.from('jobs').select('*').order('date',{ascending:false});
+    JOBS=data||[];
+    ACTIVE_TAB='dashboard';
+    render();
+  } else {
+    JOBS=[];
+    render();
+  }
+});
+
+sb.auth.getSession().then(({data:{session}})=>{
+  if(!session){ SESSION=null; render(); }
+});
 </script>
 </body>
 </html>
